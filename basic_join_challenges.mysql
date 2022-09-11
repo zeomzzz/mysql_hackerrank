@@ -1,0 +1,22 @@
+WITH counter AS (
+SELECT Hackers.hacker_id
+     , Hackers.name
+     , COUNT(*) challenges_created
+FROM Hackers 
+     INNER JOIN Challenges ON Hackers.hacker_id = Challenges.hacker_id
+GROUP BY Hackers.hacker_id
+       , Hackers.name
+)
+
+SELECT counter.hacker_id
+     , counter.name
+     , counter.challenges_created
+FROM counter
+WHERE counter.challenges_created = (SELECT MAX(counter.challenges_created) FROM counter)
+OR counter.challenges_created IN (SELECT counter.challenges_created
+                                  FROM counter
+                                  GROUP BY counter.challenges_created
+                                  HAVING COUNT(*) = 1
+                                 )
+ORDER BY counter.challenges_created DESC
+       , counter.hacker_id
