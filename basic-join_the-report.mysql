@@ -1,0 +1,8 @@
+SELECT IF(g.Grade < 8, Null, s.Name) Name
+     , g.Grade
+     , s.Marks
+FROM Students s
+     INNER JOIN Grades g ON s.Marks between g.Min_mark AND g.Max_mark
+ORDER BY g.Grade DESC
+       , Name
+       , s.Marks
